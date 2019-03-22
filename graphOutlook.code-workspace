@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+  "settings": {
+    "browser-preview.startUrl": "http://localhost:4200",
+    "workbench.colorCustomizations": {
+      "activityBar.background": "#0b7914",
+      "activityBar.foreground": "#FFFFFF",
+      "activityBar.inactiveForeground": "#FFFFFF",
+      "titleBar.activeBackground": "#0b7914",
+      "titleBar.activeForeground": "#FFFFFF",
+      "titleBar.inactiveBackground": "#0b7914",
+      "titleBar.inactiveForeground": "#FFFFFF",
+      "statusBar.background": "#0b7914",
+      "statusBar.foreground": "#FFFFFF"
+    }
+  }
+}
