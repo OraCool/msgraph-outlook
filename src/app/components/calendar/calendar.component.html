@@ -1,20 +1,63 @@
-<h1>Calendar</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-12"><h1>Calendar</h1></div>
+  </div>
+  <div class="row">
+    <div class="col-5">
+      <input type="text" class="form-control" [(ngModel)]="filterString" />
+    </div>
+    <div class="col-5"></div>
+    <div class="col-2">
+      <button (click)="runSearch()">Filter</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <ngb-datepicker
+        #dp
+        (select)="onDateSelection($event)"
+        [displayMonths]="2"
+        [dayTemplate]="t"
+        outsideDays="hidden"
+      >
+      </ngb-datepicker>
 
-<table class="table">
-  <thead>
-    <th scope="col">Organizer</th>
-    <th scope="col">Subject</th>
-    <th scope="col">Start</th>
-    <th scope="col">End</th>
-    <th scope="col">type</th>
-  </thead>
-  <tbody>
-    <tr *ngFor="let event of events">
-      <td>{{event.organizer.emailAddress.name}}</td>
-      <td>{{event.subject}}</td>
-      <td>{{formatDateTimeTimeZone(event.start) | date:'short' }}</td>
-      <td>{{formatDateTimeTimeZone(event.end) | date: 'short' }}</td>
-      <td>{{event.type}}</td>
-    </tr>
-  </tbody>
-</table>
+      <ng-template #t let-date let-focused="focused">
+        <span
+          class="custom-day"
+          [class.focused]="focused"
+          [class.range]="isRange(date)"
+          [class.faded]="isHovered(date) || isInside(date)"
+          (mouseenter)="hoveredDate = date"
+          (mouseleave)="hoveredDate = null"
+        >
+          {{ date.day }}
+        </span>
+      </ng-template>
+    </div>
+    <div class="col-3">From date: {{ fromDate | json }}</div>
+    <div class="col-3">From date: {{ toDate | json }}</div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <table class="table">
+        <thead>
+          <th scope="col">Organizer</th>
+          <th scope="col">Subject</th>
+          <th scope="col">Start</th>
+          <th scope="col">End</th>
+          <th scope="col">type</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let event of events">
+            <td>{{ event.organizer.emailAddress.name }}</td>
+            <td>{{ event.subject }}</td>
+            <td>{{ formatDateTimeTimeZone(event.start) | date: 'short' }}</td>
+            <td>{{ formatDateTimeTimeZone(event.end) | date: 'short' }}</td>
+            <td>{{ event.type }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

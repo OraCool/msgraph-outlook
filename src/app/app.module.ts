@@ -16,11 +16,13 @@ library.add(faUserCircle);
 import { MsalModule } from '@azure/msal-angular';
 import { OAuthSettings } from '../oauth';
 import { CalendarComponent } from './components/calendar/calendar.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, NavBarComponent, HomeComponent, AlertsComponent, CalendarComponent],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     NgbModule,
     FontAwesomeModule,

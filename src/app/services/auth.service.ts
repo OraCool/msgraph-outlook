@@ -90,7 +90,7 @@ export class AuthService {
     user.displayName = graphUser.displayName;
     // Prefer the mail property, but fall back to userPrincipalName
     user.email = graphUser.mail || graphUser.userPrincipalName;
-
+    user.avatar = graphUser.avatar;
     return user;
   }
 }
