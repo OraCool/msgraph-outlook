@@ -19,6 +19,7 @@ import {
   NgbDate
 } from '@ng-bootstrap/ng-bootstrap';
 import { ngbDateToDate } from 'src/app/shared/helpers/dateFormater';
+import { ExcelService } from 'src/app/services/excel.service';
 
 @Component({
   selector: 'app-calendar',
@@ -41,7 +42,8 @@ export class CalendarComponent implements OnInit {
   constructor(
     private graphService: GraphService,
     private alertsService: AlertsService,
-    private calendar: NgbCalendar
+    private calendar: NgbCalendar,
+    private excelService: ExcelService
   ) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
@@ -119,6 +121,20 @@ export class CalendarComponent implements OnInit {
       date.equals(this.toDate) ||
       this.isInside(date) ||
       this.isHovered(date)
+    );
+  }
+  exportToExcel() {
+    this.excelService.exportToExcel(
+      this.events.map((event: Event) => {
+        return {
+          Organizer: event.organizer.emailAddress.name,
+          subject: event.subject,
+          start: new Date(event.start.dateTime),
+          end: new Date(event.end.dateTime),
+          type: event.type
+        };
+      }),
+      'events'
     );
   }
 }
