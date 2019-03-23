@@ -88,7 +88,7 @@ export class CalendarComponent implements OnInit {
     );
   runSearch() {
     this.graphService
-      .getEvents({
+      .getCalendarEvents({
         subjectInclude: this.filterString,
         subjectExclude: this.excludeString,
         fromDate: ngbDateToDate(this.fromDate),

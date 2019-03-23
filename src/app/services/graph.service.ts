@@ -81,7 +81,13 @@ export class GraphService {
       query = !isEmpty(filter.subjectInclude)
         ? query.filter(`contains(subject, '${filter.subjectInclude}')`)
         : query;
+
       const result = await query
+        .query({
+          startdatetime: filter.fromDate.toISOString(),
+          enddatetime: filter.toDate.toISOString()
+        })
+        .top(10000)
         .select('subject,organizer,start,end,type')
         .orderby('createdDateTime DESC')
         .get();
