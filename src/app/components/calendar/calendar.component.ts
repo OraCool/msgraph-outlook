@@ -18,6 +18,7 @@ import {
   NgbDateStruct,
   NgbDate
 } from '@ng-bootstrap/ng-bootstrap';
+import { ngbDateToDate } from 'src/app/shared/helpers/dateFormater';
 
 @Component({
   selector: 'app-calendar',
@@ -35,6 +36,7 @@ export class CalendarComponent implements OnInit {
 
   fromDate: NgbDate;
   toDate: NgbDate;
+  excludeString: string;
 
   constructor(
     private graphService: GraphService,
@@ -85,9 +87,16 @@ export class CalendarComponent implements OnInit {
       tap(() => (this.searching = false))
     );
   runSearch() {
-    this.graphService.getEvents(this.filterString).then(events => {
-      this.events = events;
-    });
+    this.graphService
+      .getEvents({
+        subjectInclude: this.filterString,
+        subjectExclude: this.excludeString,
+        fromDate: ngbDateToDate(this.fromDate),
+        toDate: ngbDateToDate(this.toDate)
+      })
+      .then(events => {
+        this.events = events;
+      });
   }
 
   isHovered(date: NgbDate) {
