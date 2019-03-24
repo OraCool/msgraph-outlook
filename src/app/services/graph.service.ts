@@ -9,6 +9,7 @@ import { isEmpty } from 'lodash';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Filter } from '../models/filter';
+import { Calendar } from '../models/calendar';
 
 @Injectable({
   providedIn: 'root'
@@ -75,7 +76,7 @@ export class GraphService {
       );
     }
   }
-  async getCalendarEvents(filter: Filter): Promise<Event[]> {
+  async getMyCalendarView(filter: Filter): Promise<Event[]> {
     try {
       let query = this.graphClient.api('/me/calendarview');
       query = !isEmpty(filter.subjectInclude)
@@ -89,7 +90,7 @@ export class GraphService {
         })
         .top(10000)
         .select('subject,organizer,start,end,type')
-        .orderby('createdDateTime DESC')
+        .orderby('start/DateTime DESC')
         .get();
 
       return result.value;
@@ -100,6 +101,44 @@ export class GraphService {
       );
     }
   }
+  async getAllCalendar(): Promise<Calendar[]> {
+    try {
+      let result = await this.graphClient.api('/me/calendars').get();
+      return result.value;
+    } catch (error) {
+      this.alertsService.add(
+        'Could not get events',
+        JSON.stringify(error, null, 2)
+      );
+    }
+  }
+
+  async getCalendarView(calendarId: string, filter: Filter): Promise<Event[]> {
+    try {
+      let query = this.graphClient.api(`/me/calendars/${calendarId}/calendarview`);
+      query = !isEmpty(filter.subjectInclude)
+        ? query.filter(`contains(subject, '${filter.subjectInclude}')`)
+        : query;
+
+      const result = await query
+        .query({
+          startdatetime: filter.fromDate.toISOString(),
+          enddatetime: filter.toDate.toISOString()
+        })
+        .top(10000)
+        .select('subject,organizer,start,end,type')
+        .orderby('start/DateTime DESC')
+        .get();
+
+      return result.value;
+    } catch (error) {
+      this.alertsService.add(
+        'Could not get events',
+        JSON.stringify(error, null, 2)
+      );
+    }
+  }
+
   buildFilter = (filter: Filter): string => {
     let filterString = '';
     filterString = !isEmpty(filter.subjectInclude)
